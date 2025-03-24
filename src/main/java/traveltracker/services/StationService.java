@@ -2,6 +2,7 @@ package traveltracker.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.Interest;
 import traveltracker.entities.Station;
 import traveltracker.entities.User;
@@ -24,5 +25,9 @@ public class StationService {
     }*/
     public List<Station> getAllStations() {
         return stationRepository.findAll();
+    }
+
+    public Station addStation(Station station) {
+        return stationRepository.save(station);
     }
 }

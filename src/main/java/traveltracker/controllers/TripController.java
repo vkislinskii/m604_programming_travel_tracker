@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import traveltracker.entities.Route;
 import traveltracker.entities.Trip;
 import traveltracker.repositories.TripRepository;
 import traveltracker.services.*;
@@ -17,6 +18,12 @@ public class TripController {
     private final TripService tripService;
     private final TripRepository tripRepository;
 
+    @Autowired
+    public TripController(TripService tripService, TripRepository tripRepository) {
+        this.tripService = tripService;
+        this.tripRepository = tripRepository;
+    }
+
     @GetMapping ("/all-trips")
     public List<Trip> getAllTrips() {
         return tripService.getAllTrips(); //getTripsByTripId
@@ -27,10 +34,9 @@ public class TripController {
         return tripService.getTripById(id);
     }
 
-    @Autowired
-    public TripController(TripService tripService, TripRepository tripRepository) {
-        this.tripService = tripService;
-        this.tripRepository = tripRepository;
+    @PostMapping("/add")
+    public Trip addTrip(@RequestBody Trip trip) {
+        return tripService.addTrip(trip);
     }
 
     /*@GetMapping("/{tripId}/emissions")

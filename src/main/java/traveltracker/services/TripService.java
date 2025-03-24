@@ -2,6 +2,7 @@ package traveltracker.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.*;
 import traveltracker.repositories.*;
 
@@ -34,6 +35,10 @@ public class TripService {
 
     public Optional<Trip> getTripById(Integer id) {
         return tripRepository.findById(id);
+    }
+
+    public Trip addTrip(Trip trip) {
+        return tripRepository.save(trip);
     }
 
 }

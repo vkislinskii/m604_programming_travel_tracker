@@ -2,6 +2,7 @@ package traveltracker.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.CityInterest;
 import traveltracker.repositories.CityInterestRepository;
 
@@ -19,5 +20,9 @@ public class CityInterestService {
 
     public List<CityInterest> getInterestByCityId(Integer id) {
         return cityInterestRepository.findByCity_CityId(id);
+    }
+
+    public CityInterest addCityInterest(CityInterest cityInterest) {
+        return cityInterestRepository.save(cityInterest);
     }
 }

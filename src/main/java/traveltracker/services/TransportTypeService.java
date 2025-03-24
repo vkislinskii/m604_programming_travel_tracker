@@ -2,6 +2,7 @@ package traveltracker.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.Interest;
 import traveltracker.entities.TransportType;
 import traveltracker.repositories.TransportTypeRepository;
@@ -20,5 +21,9 @@ public class TransportTypeService {
 
     public List<TransportType> getAllTransportTypes() {
         return transportTypeRepository.findAll();
+    }
+
+    public TransportType addTransportType(TransportType transportType) {
+        return transportTypeRepository.save(transportType);
     }
 }

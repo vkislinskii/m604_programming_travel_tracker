@@ -2,6 +2,7 @@ package traveltracker.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.RouteCode;
 import traveltracker.repositories.RouteCodeRepository;
 
@@ -18,5 +19,9 @@ public class RouteCodeService {
 
     public Optional<RouteCode> getRouteCodeById(Integer id) {
         return routeCodeRepository.findById(String.valueOf(id));
+    }
+
+    public RouteCode addRouteCode(RouteCode routeCode) {
+        return routeCodeRepository.save(routeCode);
     }
 }
