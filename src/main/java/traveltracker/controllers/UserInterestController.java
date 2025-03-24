@@ -1,9 +1,8 @@
 package traveltracker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import traveltracker.entities.CityInterest;
-import traveltracker.entities.Route;
 import traveltracker.entities.UserInterest;
 import traveltracker.repositories.UserInterestRepository;
 import traveltracker.services.UserInterestService;
@@ -31,5 +30,11 @@ public class UserInterestController {
     @PostMapping("/add")
     public UserInterest addUserInterest(@RequestBody UserInterest userInterest) {
         return userInterestService.addUserInterest(userInterest);
+    }
+
+    @DeleteMapping("/delete-{userId}-{interestId}")
+    public ResponseEntity<Void> deleteUserInterest(@PathVariable Integer userId, @PathVariable Integer interestId) {
+        boolean isDeleted = userInterestService.deleteUserInterest(userId, interestId);
+        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

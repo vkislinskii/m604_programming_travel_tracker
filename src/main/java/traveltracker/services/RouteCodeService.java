@@ -1,9 +1,8 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import traveltracker.entities.Interest;
 import traveltracker.entities.RouteCode;
 import traveltracker.repositories.RouteCodeRepository;
 
@@ -34,5 +33,14 @@ public class RouteCodeService {
         existingRouteCode.setOperator(routeCodeDetails.getOperator());
 
         return routeCodeRepository.save(existingRouteCode);
+    }
+
+    @Transactional
+    public boolean deleteRouteCode(String routeCodeId) {
+        if (routeCodeRepository.existsById(routeCodeId)) {
+            routeCodeRepository.deleteById(routeCodeId);
+            return true;
+        }
+        return false;
     }
 }

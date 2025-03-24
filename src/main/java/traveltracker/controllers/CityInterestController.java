@@ -3,11 +3,8 @@ package traveltracker.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import traveltracker.entities.City;
 import traveltracker.entities.CityInterest;
-import traveltracker.entities.CityInterestId;
 import traveltracker.repositories.CityInterestRepository;
-import traveltracker.repositories.CityRepository;
 import traveltracker.services.CityInterestService;
 
 import java.util.List;
@@ -35,5 +32,10 @@ public class CityInterestController {
         return cityInterestService.addCityInterest(cityInterest);
     }
 
+    @DeleteMapping("/delete-{cityId}-{interestId}")
+    public ResponseEntity<Void> deleteCityInterest(@PathVariable Integer cityId, @PathVariable Integer interestId) {
+        boolean isDeleted = cityInterestService.deleteCityInterest(cityId, interestId);
+        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 
 }

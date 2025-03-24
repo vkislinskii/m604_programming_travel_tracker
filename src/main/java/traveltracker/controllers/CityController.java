@@ -1,6 +1,6 @@
 package traveltracker.controllers;
 
-import jakarta.persistence.Entity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +47,11 @@ public class CityController {
 
         City updatedEntity = cityService.updateCity(cityId, cityDetails);
         return ResponseEntity.ok(updatedEntity);
+    }
+
+    @DeleteMapping("/delete-{cityId}")
+    public ResponseEntity<Void> deleteCity(@PathVariable Integer cityId) {
+        boolean isDeleted = cityService.deleteCity(cityId);
+        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

@@ -1,8 +1,8 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.*;
 import traveltracker.repositories.*;
 
@@ -35,5 +35,14 @@ public class UserService {
         existingUser.setRegistrationDate(userDetails.getRegistrationDate());
 
         return userRepository.save(existingUser);
+    }
+
+    @Transactional
+    public boolean deleteUser(Integer userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+            return true;
+        }
+        return false;
     }
 }

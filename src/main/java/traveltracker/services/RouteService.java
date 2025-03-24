@@ -1,10 +1,9 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.Route;
-import traveltracker.entities.RouteCode;
 import traveltracker.repositories.RouteRepository;
 
 import java.util.Optional;
@@ -36,5 +35,14 @@ public class RouteService {
         existingRoute.setDistance(routeDetails.getDistance());
 
         return routeRepository.save(existingRoute);
+    }
+
+    @Transactional
+    public boolean deleteRoute(Integer routeId) {
+        if (routeRepository.existsById(routeId)) {
+            routeRepository.deleteById(routeId);
+            return true;
+        }
+        return false;
     }
 }

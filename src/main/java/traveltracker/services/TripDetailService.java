@@ -1,9 +1,8 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import traveltracker.entities.Route;
 import traveltracker.entities.TripDetail;
 import traveltracker.repositories.TripDetailRepository;
 
@@ -34,5 +33,14 @@ public class TripDetailService {
         existingTripDetail.setTripId(tripDetailDetails.getTripId());
 
         return tripDetailRepository.save(existingTripDetail);
+    }
+
+    @Transactional
+    public boolean deleteTripDetail(Integer tripDetailId) {
+        if (tripDetailRepository.existsById(tripDetailId)) {
+            tripDetailRepository.deleteById(tripDetailId);
+            return true;
+        }
+        return false;
     }
 }

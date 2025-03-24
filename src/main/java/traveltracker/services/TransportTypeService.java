@@ -1,9 +1,8 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import traveltracker.entities.Interest;
 import traveltracker.entities.TransportType;
 import traveltracker.repositories.TransportTypeRepository;
 
@@ -25,5 +24,14 @@ public class TransportTypeService {
 
     public TransportType addTransportType(TransportType transportType) {
         return transportTypeRepository.save(transportType);
+    }
+
+    @Transactional
+    public boolean deleteTransportType(String transportType) {
+        if (transportTypeRepository.existsById(transportType)) {
+            transportTypeRepository.deleteById(transportType);
+            return true;
+        }
+        return false;
     }
 }

@@ -1,9 +1,8 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import traveltracker.entities.City;
 import traveltracker.entities.CityInterest;
 import traveltracker.entities.CityInterestId;
 import traveltracker.repositories.CityInterestRepository;
@@ -26,5 +25,17 @@ public class CityInterestService {
 
     public CityInterest addCityInterest(CityInterest cityInterest) {
         return cityInterestRepository.save(cityInterest);
+    }
+
+    @Transactional
+    public boolean deleteCityInterest(Integer cityId, Integer interestId) {
+        CityInterestId id = new CityInterestId();
+        id.setCityId(cityId);
+        id.setInterestId(interestId);
+        if (cityInterestRepository.existsById(id)) {
+            cityInterestRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

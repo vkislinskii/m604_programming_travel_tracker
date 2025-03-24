@@ -1,8 +1,8 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.City;
 import traveltracker.repositories.CityRepository;
 
@@ -29,11 +29,18 @@ public class CityService {
         City existingCity = cityRepository.findById(cityId)
                 .orElseThrow(() -> new RuntimeException("Entity not found with id: " + cityId));
 
-        // Update all fields you want to be updatable
         existingCity.setCityName(cityDetails.getCityName());
         existingCity.setCountry(cityDetails.getCountry());
-        // ... update other fields as needed
 
         return cityRepository.save(existingCity);
+    }
+
+    @Transactional
+    public boolean deleteCity(Integer cityId) {
+        if (cityRepository.existsById(cityId)) {
+            cityRepository.deleteById(cityId);
+            return true;
+        }
+        return false;
     }
 }

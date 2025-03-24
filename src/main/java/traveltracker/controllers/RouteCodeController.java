@@ -3,9 +3,6 @@ package traveltracker.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import traveltracker.entities.City;
-import traveltracker.entities.Emission;
-import traveltracker.entities.Interest;
 import traveltracker.entities.RouteCode;
 import traveltracker.repositories.RouteCodeRepository;
 import traveltracker.services.RouteCodeService;
@@ -41,5 +38,11 @@ public class RouteCodeController {
 
         RouteCode updatedEntity = routeCodeService.updateRouteCode(routeCodeId, routeCodeDetails);
         return ResponseEntity.ok(updatedEntity);
+    }
+
+    @DeleteMapping("/delete-{routeCodeId}")
+    public ResponseEntity<Void> deleteRouteCode(@PathVariable String routeCodeId) {
+        boolean isDeleted = routeCodeService.deleteRouteCode(routeCodeId);
+        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

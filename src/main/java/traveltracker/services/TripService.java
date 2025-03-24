@@ -1,8 +1,8 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.*;
 import traveltracker.repositories.*;
 
@@ -52,6 +52,15 @@ public class TripService {
         existingTrip.setCityDepartureId(tripDetails.getCityDepartureId());
 
         return tripRepository.save(existingTrip);
+    }
+
+    @Transactional
+    public boolean deleteTrip(Integer tripId) {
+        if (tripRepository.existsById(tripId)) {
+            tripRepository.deleteById(tripId);
+            return true;
+        }
+        return false;
     }
 
 }

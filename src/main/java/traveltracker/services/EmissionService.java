@@ -1,9 +1,8 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import traveltracker.entities.City;
 import traveltracker.entities.Emission;
 import traveltracker.repositories.EmissionRepository;
 
@@ -36,5 +35,14 @@ public class EmissionService {
         existingEmission.setCo2Coef(emissionDetails.getCo2Coef());
 
         return emissionRepository.save(existingEmission);
+    }
+
+    @Transactional
+    public boolean deleteEmission(Integer emissionId) {
+        if (emissionRepository.existsById(emissionId)) {
+            emissionRepository.deleteById(emissionId);
+            return true;
+        }
+        return false;
     }
 }

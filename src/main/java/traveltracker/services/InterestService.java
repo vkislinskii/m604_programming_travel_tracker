@@ -1,12 +1,9 @@
 package traveltracker.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import traveltracker.entities.Emission;
 import traveltracker.entities.Interest;
-import traveltracker.entities.Trip;
-import traveltracker.entities.User;
 import traveltracker.repositories.InterestRepository;
 
 import java.util.List;
@@ -36,6 +33,15 @@ public class InterestService {
         existingInterest.setInterestName(interestDetails.getInterestName());
 
         return interestRepository.save(existingInterest);
+    }
+
+    @Transactional
+    public boolean deleteInterest(Integer interestId) {
+        if (interestRepository.existsById(interestId)) {
+            interestRepository.deleteById(interestId);
+            return true;
+        }
+        return false;
     }
 }
 

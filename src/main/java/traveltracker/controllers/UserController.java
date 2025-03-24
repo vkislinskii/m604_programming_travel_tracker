@@ -3,8 +3,6 @@ package traveltracker.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import traveltracker.entities.Route;
-import traveltracker.entities.Trip;
 import traveltracker.entities.User;
 import traveltracker.repositories.UserRepository;
 import traveltracker.services.UserService;
@@ -40,5 +38,11 @@ public class UserController {
 
         User updatedEntity = userService.updateUser(userId, userDetails);
         return ResponseEntity.ok(updatedEntity);
+    }
+
+    @DeleteMapping("/delete-{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer userId) {
+        boolean isDeleted = userService.deleteUser(userId);
+        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

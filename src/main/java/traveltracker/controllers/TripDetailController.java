@@ -3,7 +3,6 @@ package traveltracker.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import traveltracker.entities.Route;
 import traveltracker.entities.TripDetail;
 import traveltracker.repositories.TripDetailRepository;
 import traveltracker.services.TripDetailService;
@@ -39,5 +38,11 @@ public class TripDetailController {
 
         TripDetail updatedEntity = tripDetailService.updateTripDetail(tripDetailId, tripDetailDetails);
         return ResponseEntity.ok(updatedEntity);
+    }
+
+    @DeleteMapping("/delete-{tripDetailId}")
+    public ResponseEntity<Void> deleteTripDetail(@PathVariable Integer tripDetailId) {
+        boolean isDeleted = tripDetailService.deleteTripDetail(tripDetailId);
+        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

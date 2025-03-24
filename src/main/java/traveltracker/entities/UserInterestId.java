@@ -7,4 +7,12 @@ import java.io.Serializable;
 public class UserInterestId implements Serializable {
     private Integer userId;
     private Integer interestId;
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public void setInterestId(Integer interestId) {
+        this.interestId = interestId;
+    }
 }
