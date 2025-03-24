@@ -24,4 +24,16 @@ public class CityService {
     public City addCity(City city) {
         return cityRepository.save(city);
     }
+
+    public City updateCity(Integer cityId, City cityDetails) {
+        City existingCity = cityRepository.findById(cityId)
+                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + cityId));
+
+        // Update all fields you want to be updatable
+        existingCity.setCityName(cityDetails.getCityName());
+        existingCity.setCountry(cityDetails.getCountry());
+        // ... update other fields as needed
+
+        return cityRepository.save(existingCity);
+    }
 }

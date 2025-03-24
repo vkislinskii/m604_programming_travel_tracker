@@ -3,7 +3,9 @@ package traveltracker.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import traveltracker.entities.City;
 import traveltracker.entities.CityInterest;
+import traveltracker.entities.CityInterestId;
 import traveltracker.repositories.CityInterestRepository;
 
 import java.util.List;

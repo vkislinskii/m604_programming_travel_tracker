@@ -1,6 +1,7 @@
 package traveltracker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.Route;
 import traveltracker.entities.Station;
@@ -30,5 +31,14 @@ public class StationController {
     @PostMapping("/add")
     public Station addStation(@RequestBody Station station) {
         return stationService.addStation(station);
+    }
+
+    @PutMapping("/update-{stationName}")
+    public ResponseEntity<Station> updateStation(
+            @PathVariable String stationName,
+            @RequestBody Station stationDetails) {
+
+        Station updatedEntity = stationService.updateStation(stationName, stationDetails);
+        return ResponseEntity.ok(updatedEntity);
     }
 }

@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.Route;
+import traveltracker.entities.Station;
 import traveltracker.entities.Trip;
+import traveltracker.entities.TripDetail;
 import traveltracker.repositories.TripRepository;
 import traveltracker.services.*;
 
@@ -37,6 +39,15 @@ public class TripController {
     @PostMapping("/add")
     public Trip addTrip(@RequestBody Trip trip) {
         return tripService.addTrip(trip);
+    }
+
+    @PutMapping("/update-{tripId}")
+    public ResponseEntity<Trip> updateTrip(
+            @PathVariable Integer tripId,
+            @RequestBody Trip tripDetails) {
+
+        Trip updatedEntity = tripService.updateTrip(tripId, tripDetails);
+        return ResponseEntity.ok(updatedEntity);
     }
 
     /*@GetMapping("/{tripId}/emissions")

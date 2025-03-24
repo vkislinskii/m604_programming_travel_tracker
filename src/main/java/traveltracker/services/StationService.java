@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import traveltracker.entities.Interest;
+import traveltracker.entities.Route;
 import traveltracker.entities.Station;
 import traveltracker.entities.User;
 import traveltracker.repositories.StationRepository;
@@ -29,5 +30,14 @@ public class StationService {
 
     public Station addStation(Station station) {
         return stationRepository.save(station);
+    }
+
+    public Station updateStation(String stationName, Station stationDetails) {
+        Station existingStation = stationRepository.findById(stationName)
+                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + stationName));
+
+        existingStation.setCity(stationDetails.getCity());
+
+        return stationRepository.save(existingStation);
     }
 }

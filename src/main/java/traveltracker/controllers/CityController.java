@@ -1,6 +1,8 @@
 package traveltracker.controllers;
 
+import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.City;
 import traveltracker.repositories.CityRepository;
@@ -36,5 +38,14 @@ public class CityController {
     @PostMapping("/add")
     public City addCity(@RequestBody City city) {
         return cityService.addCity(city);
+    }
+
+    @PutMapping("/update-city-{cityId}")
+    public ResponseEntity<City> updateCity(
+            @PathVariable Integer cityId,
+            @RequestBody City cityDetails) {
+
+        City updatedEntity = cityService.updateCity(cityId, cityDetails);
+        return ResponseEntity.ok(updatedEntity);
     }
 }

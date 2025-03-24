@@ -1,9 +1,11 @@
 package traveltracker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.City;
 import traveltracker.entities.Emission;
+import traveltracker.entities.Interest;
 import traveltracker.entities.RouteCode;
 import traveltracker.repositories.RouteCodeRepository;
 import traveltracker.services.RouteCodeService;
@@ -30,5 +32,14 @@ public class RouteCodeController {
     @PostMapping("/add")
     public RouteCode addRouteCode(@RequestBody RouteCode routeCode) {
         return routeCodeService.addRouteCode(routeCode);
+    }
+
+    @PutMapping("/update-{routeCodeId}")
+    public ResponseEntity<RouteCode> updateRouteCode(
+            @PathVariable String routeCodeId,
+            @RequestBody RouteCode routeCodeDetails) {
+
+        RouteCode updatedEntity = routeCodeService.updateRouteCode(routeCodeId, routeCodeDetails);
+        return ResponseEntity.ok(updatedEntity);
     }
 }

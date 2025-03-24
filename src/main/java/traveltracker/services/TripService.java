@@ -41,4 +41,17 @@ public class TripService {
         return tripRepository.save(trip);
     }
 
+    public Trip updateTrip(Integer tripId, Trip tripDetails) {
+        Trip existingTrip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + tripId));
+
+        existingTrip.setTripDate(tripDetails.getTripDate());
+        existingTrip.setTripRating(tripDetails.getTripRating());
+        existingTrip.setUserId(tripDetails.getUserId());
+        existingTrip.setCityArrivalId(tripDetails.getCityArrivalId());
+        existingTrip.setCityDepartureId(tripDetails.getCityDepartureId());
+
+        return tripRepository.save(existingTrip);
+    }
+
 }

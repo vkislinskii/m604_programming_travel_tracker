@@ -1,8 +1,10 @@
 package traveltracker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.Route;
+import traveltracker.entities.Trip;
 import traveltracker.entities.User;
 import traveltracker.repositories.UserRepository;
 import traveltracker.services.UserService;
@@ -29,5 +31,14 @@ public class UserController {
     @PostMapping("/add")
     public User addUser(@RequestBody User user) {
         return userService.addUser(user);
+    }
+
+    @PutMapping("/update-{userId}")
+    public ResponseEntity<User> updateUser(
+            @PathVariable Integer userId,
+            @RequestBody User userDetails) {
+
+        User updatedEntity = userService.updateUser(userId, userDetails);
+        return ResponseEntity.ok(updatedEntity);
     }
 }

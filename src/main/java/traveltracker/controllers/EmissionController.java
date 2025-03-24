@@ -1,6 +1,7 @@
 package traveltracker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.City;
 import traveltracker.entities.Emission;
@@ -29,5 +30,14 @@ public class EmissionController {
     @PostMapping("/add")
     public Emission addEmission(@RequestBody Emission emission) {
         return emissionService.addEmission(emission);
+    }
+
+    @PutMapping("/update-{emissionId}")
+    public ResponseEntity<Emission> updateEmission(
+            @PathVariable Integer emissionId,
+            @RequestBody Emission emissionDetails) {
+
+        Emission updatedEntity = emissionService.updateEmission(emissionId, emissionDetails);
+        return ResponseEntity.ok(updatedEntity);
     }
 }

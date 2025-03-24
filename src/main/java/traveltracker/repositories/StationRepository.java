@@ -6,7 +6,7 @@ import traveltracker.entities.Station;
 
 import java.util.Optional;
 
-public interface StationRepository extends JpaRepository<Station, Integer>{
+public interface StationRepository extends JpaRepository<Station, String>{
 
     Optional<Station> findByCity(City city);
 }

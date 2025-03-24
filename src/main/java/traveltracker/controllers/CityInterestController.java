@@ -1,9 +1,11 @@
 package traveltracker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.City;
 import traveltracker.entities.CityInterest;
+import traveltracker.entities.CityInterestId;
 import traveltracker.repositories.CityInterestRepository;
 import traveltracker.repositories.CityRepository;
 import traveltracker.services.CityInterestService;
@@ -32,4 +34,6 @@ public class CityInterestController {
     public CityInterest addCityInterest(@RequestBody CityInterest cityInterest) {
         return cityInterestService.addCityInterest(cityInterest);
     }
+
+
 }

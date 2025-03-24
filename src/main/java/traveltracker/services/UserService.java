@@ -24,4 +24,16 @@ public class UserService {
     public User addUser(User user) {
         return userRepository.save(user);
     }
+
+    public User updateUser(Integer userId, User userDetails) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + userId));
+
+        existingUser.setFirstName(userDetails.getFirstName());
+        existingUser.setLastName(userDetails.getLastName());
+        existingUser.setCurrentCity(userDetails.getCurrentCity());
+        existingUser.setRegistrationDate(userDetails.getRegistrationDate());
+
+        return userRepository.save(existingUser);
+    }
 }
