@@ -3,11 +3,11 @@ package traveltracker.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveltracker.ResourceNotFoundException;
 import traveltracker.entities.*;
 import traveltracker.repositories.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TripService {
@@ -33,8 +33,9 @@ public class TripService {
         return tripRepository.findAll();
     }
 
-    public Optional<Trip> getTripById(Integer id) {
-        return tripRepository.findById(id);
+    public Trip getTripById(Integer id) {
+        return tripRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Trip not found with id: " + id));
     }
 
     public Trip addTrip(Trip trip) {
@@ -43,7 +44,7 @@ public class TripService {
 
     public Trip updateTrip(Integer tripId, Trip tripDetails) {
         Trip existingTrip = tripRepository.findById(tripId)
-                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + tripId));
+                .orElseThrow(() -> new ResourceNotFoundException("Trip not found with id: " + tripId));
 
         existingTrip.setTripDate(tripDetails.getTripDate());
         existingTrip.setTripRating(tripDetails.getTripRating());
@@ -55,16 +56,17 @@ public class TripService {
     }
 
     @Transactional
-    public boolean deleteTrip(Integer tripId) {
-        if (tripRepository.existsById(tripId)) {
-            tripRepository.deleteById(tripId);
-            return true;
-        }
-        return false;
+    public void deleteTrip(Integer tripId) {
+        tripRepository.findById(tripId)
+                .orElseThrow(() -> new ResourceNotFoundException("Trip not found with id: " + tripId));
+        tripRepository.deleteById(tripId);
     }
 
     static double calculateTripEmissions(int tripId, TripDetailRepository tripDetailRepository, EmissionRepository emissionRepository) {
         List<TripDetail> tripDetails = tripDetailRepository.findByTripId_TripId(tripId);
+        if (tripDetails.isEmpty()) {
+            throw new ResourceNotFoundException("Trip not found with id: " + tripId);
+        }
         int totalDistance = 0;
         double totalEmissions = 0;
         for (TripDetail tripDetail : tripDetails) {

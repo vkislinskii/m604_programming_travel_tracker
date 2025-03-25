@@ -1,6 +1,7 @@
 package traveltracker.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.time.LocalDate;
 
@@ -14,14 +15,17 @@ public class Trip {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull(message = "User ID is required")
     private User userId;
 
     @ManyToOne
     @JoinColumn(name = "city_departure_id")
+    @NotNull(message = "City Departure ID is required")
     private City cityDepartureId;
 
     @ManyToOne
     @JoinColumn(name = "city_arrival_id")
+    @NotNull(message = "City Arrival ID is required")
     private City cityArrivalId;
 
     private LocalDate tripDate;

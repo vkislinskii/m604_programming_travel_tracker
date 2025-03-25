@@ -1,5 +1,6 @@
 package traveltracker.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +9,6 @@ import traveltracker.repositories.CityInterestRepository;
 import traveltracker.services.CityInterestService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cities-interests")
@@ -23,19 +23,19 @@ public class CityInterestController {
     }
 
     @GetMapping("/interests-city{id}")
-    public List<CityInterest> getInterestByCityId(@PathVariable Integer id) {
-        return cityInterestService.getInterestByCityId(id);
+    public ResponseEntity<List<CityInterest>> getInterestByCityId(@PathVariable Integer id) {
+        return ResponseEntity.ok(cityInterestService.getInterestByCityId(id));
     }
 
     @PostMapping("/add")
-    public CityInterest addCityInterest(@RequestBody CityInterest cityInterest) {
-        return cityInterestService.addCityInterest(cityInterest);
+    public ResponseEntity<CityInterest> addCityInterest(@Valid @RequestBody CityInterest cityInterest) {
+        return ResponseEntity.ok(cityInterestService.addCityInterest(cityInterest));
     }
 
     @DeleteMapping("/delete-{cityId}-{interestId}")
-    public ResponseEntity<Void> deleteCityInterest(@PathVariable Integer cityId, @PathVariable Integer interestId) {
-        boolean isDeleted = cityInterestService.deleteCityInterest(cityId, interestId);
-        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<CityInterest> deleteCityInterest(@PathVariable Integer cityId, @PathVariable Integer interestId) {
+        cityInterestService.deleteCityInterest(cityId, interestId);
+        return ResponseEntity.noContent().build();
     }
 
 }

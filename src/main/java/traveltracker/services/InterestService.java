@@ -3,11 +3,11 @@ package traveltracker.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveltracker.ResourceNotFoundException;
 import traveltracker.entities.Interest;
 import traveltracker.repositories.InterestRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class InterestService {
@@ -19,7 +19,11 @@ public class InterestService {
     }
 
     public List<Interest> getAllInterests() {
-        return interestRepository.findAll(); //getTripsByTripId
+        List<Interest> interests = interestRepository.findAll();
+        if (interests.isEmpty()) {
+            throw new ResourceNotFoundException("No interests types were found");
+        }
+        return interests;
     }
 
     public Interest addInterest(Interest interest) {
@@ -28,7 +32,7 @@ public class InterestService {
 
     public Interest updateInterest(Integer interestId, Interest interestDetails) {
         Interest existingInterest = interestRepository.findById(interestId)
-                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + interestId));
+                .orElseThrow(() -> new ResourceNotFoundException("Interest not found with id: " + interestId));
 
         existingInterest.setInterestName(interestDetails.getInterestName());
 
@@ -36,12 +40,10 @@ public class InterestService {
     }
 
     @Transactional
-    public boolean deleteInterest(Integer interestId) {
-        if (interestRepository.existsById(interestId)) {
-            interestRepository.deleteById(interestId);
-            return true;
-        }
-        return false;
+    public void deleteInterest(Integer interestId) {
+        interestRepository.findById(interestId)
+                .orElseThrow(() -> new ResourceNotFoundException("Interest not found with id: " + interestId));
+        interestRepository.deleteById(interestId);
     }
 }
 

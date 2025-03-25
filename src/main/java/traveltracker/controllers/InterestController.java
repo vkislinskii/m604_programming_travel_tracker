@@ -1,5 +1,6 @@
 package traveltracker.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +9,6 @@ import traveltracker.repositories.InterestRepository;
 import traveltracker.services.InterestService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/interests")
@@ -24,27 +24,27 @@ public class InterestController {
     }
 
     @GetMapping("/all")
-    public List<Interest> getAllInterests() {
-        return interestService.getAllInterests();
+    public ResponseEntity<List<Interest>> getAllInterests() {
+        return ResponseEntity.ok(interestService.getAllInterests());
     }
 
     @PostMapping("/add")
-    public Interest addInterest(@RequestBody Interest interest) {
-        return interestService.addInterest(interest);
+    public ResponseEntity<Interest> addInterest(@Valid @RequestBody Interest interest) {
+        return ResponseEntity.ok(interestService.addInterest(interest));
     }
 
     @PutMapping("/update-{interestId}")
     public ResponseEntity<Interest> updateInterest(
             @PathVariable Integer interestId,
-            @RequestBody Interest interestDetails) {
+            @Valid @RequestBody Interest interestDetails) {
 
         Interest updatedEntity = interestService.updateInterest(interestId, interestDetails);
         return ResponseEntity.ok(updatedEntity);
     }
 
     @DeleteMapping("/delete-{interestId}")
-    public ResponseEntity<Void> deleteInterest(@PathVariable Integer interestId) {
-        boolean isDeleted = interestService.deleteInterest(interestId);
-        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<Interest> deleteInterest(@PathVariable Integer interestId) {
+        interestService.deleteInterest(interestId);
+        return ResponseEntity.noContent().build();
     }
 }

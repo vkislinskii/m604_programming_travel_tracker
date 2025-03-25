@@ -3,10 +3,10 @@ package traveltracker.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveltracker.ResourceNotFoundException;
 import traveltracker.entities.RouteCode;
 import traveltracker.repositories.RouteCodeRepository;
 
-import java.util.Optional;
 
 @Service
 public class RouteCodeService {
@@ -17,8 +17,9 @@ public class RouteCodeService {
         this.routeCodeRepository = routeCodeRepository;
     }
 
-    public Optional<RouteCode> getRouteCodeById(Integer id) {
-        return routeCodeRepository.findById(String.valueOf(id));
+    public RouteCode getRouteCodeById(Integer id) {
+        return routeCodeRepository.findById(String.valueOf(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Route Code not found with id: " + id));
     }
 
     public RouteCode addRouteCode(RouteCode routeCode) {
@@ -27,7 +28,7 @@ public class RouteCodeService {
 
     public RouteCode updateRouteCode(String routeCodeId, RouteCode routeCodeDetails) {
         RouteCode existingRouteCode = routeCodeRepository.findById(routeCodeId)
-                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + routeCodeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Route Code not found with id: " + routeCodeId));
 
         existingRouteCode.setRouteName(routeCodeDetails.getRouteName());
         existingRouteCode.setOperator(routeCodeDetails.getOperator());
@@ -36,11 +37,9 @@ public class RouteCodeService {
     }
 
     @Transactional
-    public boolean deleteRouteCode(String routeCodeId) {
-        if (routeCodeRepository.existsById(routeCodeId)) {
-            routeCodeRepository.deleteById(routeCodeId);
-            return true;
-        }
-        return false;
+    public void deleteRouteCode(String routeCodeId) {
+        routeCodeRepository.findById(routeCodeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Route Code not found with id: " + routeCodeId));
+        routeCodeRepository.deleteById(routeCodeId);
     }
 }

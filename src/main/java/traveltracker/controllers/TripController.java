@@ -1,5 +1,6 @@
 package traveltracker.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +9,6 @@ import traveltracker.repositories.TripRepository;
 import traveltracker.services.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/trips")
@@ -24,53 +24,37 @@ public class TripController {
 
     @GetMapping ("/all-trips")
     public List<Trip> getAllTrips() {
-        return tripService.getAllTrips(); //getTripsByTripId
+        return tripService.getAllTrips();
     }
 
     @GetMapping("/{id}")
-    public Optional<Trip> getTripById(@PathVariable Integer id) {
-        return tripService.getTripById(id);
+    public ResponseEntity<Trip> getTripById(@PathVariable Integer id) {
+        return ResponseEntity.ok(tripService.getTripById(id));
     }
 
     @PostMapping("/add")
-    public Trip addTrip(@RequestBody Trip trip) {
-        return tripService.addTrip(trip);
+    public ResponseEntity<Trip> addTrip(@Valid @RequestBody Trip trip) {
+        return ResponseEntity.ok(tripService.addTrip(trip));
     }
 
     @PutMapping("/update-{tripId}")
     public ResponseEntity<Trip> updateTrip(
             @PathVariable Integer tripId,
-            @RequestBody Trip tripDetails) {
+            @Valid @RequestBody Trip tripDetails) {
 
         Trip updatedEntity = tripService.updateTrip(tripId, tripDetails);
         return ResponseEntity.ok(updatedEntity);
     }
 
     @DeleteMapping("/delete-{tripId}")
-    public ResponseEntity<Void> deleteTrip(@PathVariable Integer tripId) {
-        boolean isDeleted = tripService.deleteTrip(tripId);
-        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<Trip> deleteTrip(@PathVariable Integer tripId) {
+        tripService.deleteTrip(tripId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/emissions/{tripId}")
-    public String calculateTripEmissions(@PathVariable Integer tripId) {
-        return tripService.sendTripEmissions(tripId);
+    public ResponseEntity<String> calculateTripEmissions(@PathVariable Integer tripId) {
+        return ResponseEntity.ok(tripService.sendTripEmissions(tripId));
     }
-
-    /*@GetMapping("/{tripId}/emissions")
-    public ResponseEntity<Double> getTripEmissions(@PathVariable int tripId) {
-        double emissions = tripService.calculateTripEmissions(tripId);
-        return new ResponseEntity<>(emissions, HttpStatus.OK);
-    }*/
-
-    /*@PostMapping
-    public <TripRequest> ResponseEntity<Trip> createTrip(
-            @RequestBody TripRequest tripRequest // DTO class to accept user input
-    ) {
-        Trip trip = new Trip();
-        // Map fields from tripRequest to trip (e.g., cityDepartureId, user_id)
-        Trip createdTrip = tripService.createTrip(trip, tripRequest.getRouteIds());
-        return new ResponseEntity<>(createdTrip, HttpStatus.CREATED);
-    }*/
 
 }

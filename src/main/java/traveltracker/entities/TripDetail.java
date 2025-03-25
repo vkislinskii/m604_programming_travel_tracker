@@ -1,6 +1,7 @@
 package traveltracker.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -13,10 +14,12 @@ public class TripDetail {
 
     @ManyToOne
     @JoinColumn(name = "trip_id")
+    @NotNull(message = "Trip ID is required")
     private Trip tripId;
 
     @ManyToOne
     @JoinColumn(name = "route_id")
+    @NotNull(message = "Route ID is required")
     private Route routeId;
 
 }

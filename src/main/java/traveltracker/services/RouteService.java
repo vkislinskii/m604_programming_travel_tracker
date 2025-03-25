@@ -3,10 +3,9 @@ package traveltracker.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveltracker.ResourceNotFoundException;
 import traveltracker.entities.Route;
 import traveltracker.repositories.RouteRepository;
-
-import java.util.Optional;
 
 @Service
 public class RouteService {
@@ -17,8 +16,9 @@ public class RouteService {
         this.routeRepository = routeRepository;
     }
 
-    public Optional<Route> getRouteById(Integer id) {
-        return routeRepository.findById(id);
+    public Route getRouteById(Integer id) {
+        return routeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + id));
     }
 
     public Route addRoute(Route route) {
@@ -27,7 +27,7 @@ public class RouteService {
 
     public Route updateRoute(Integer routeId, Route routeDetails) {
         Route existingRoute = routeRepository.findById(routeId)
-                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + routeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + routeId));
 
         existingRoute.setRouteCodeId(routeDetails.getRouteCodeId());
         existingRoute.setStation1Name(routeDetails.getStation1Name());
@@ -38,11 +38,9 @@ public class RouteService {
     }
 
     @Transactional
-    public boolean deleteRoute(Integer routeId) {
-        if (routeRepository.existsById(routeId)) {
-            routeRepository.deleteById(routeId);
-            return true;
-        }
-        return false;
+    public void deleteRoute(Integer routeId) {
+        routeRepository.findById(routeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + routeId));
+        routeRepository.deleteById(routeId);
     }
 }

@@ -3,10 +3,9 @@ package traveltracker.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveltracker.ResourceNotFoundException;
 import traveltracker.entities.TripDetail;
 import traveltracker.repositories.TripDetailRepository;
-
-import java.util.Optional;
 
 @Service
 public class TripDetailService {
@@ -17,8 +16,9 @@ public class TripDetailService {
         this.tripDetailRepository = tripDetailRepository;
     }
 
-    public Optional<TripDetail> getRoutesByTripId(Integer id) {
-        return tripDetailRepository.findByTripDetailId(id);
+    public TripDetail getRoutesByTripId(Integer id) {
+        return tripDetailRepository.findByTripDetailId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No routes found for trip ID: " + id));
     }
 
     public TripDetail addTripDetail(TripDetail tripDetail) {
@@ -27,7 +27,7 @@ public class TripDetailService {
 
     public TripDetail updateTripDetail(Integer tripDetailId, TripDetail tripDetailDetails) {
         TripDetail existingTripDetail = tripDetailRepository.findById(tripDetailId)
-                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + tripDetailId));
+                .orElseThrow(() -> new ResourceNotFoundException("Trip Details not found with id: " + tripDetailId));
 
         existingTripDetail.setRouteId(tripDetailDetails.getRouteId());
         existingTripDetail.setTripId(tripDetailDetails.getTripId());
@@ -36,11 +36,9 @@ public class TripDetailService {
     }
 
     @Transactional
-    public boolean deleteTripDetail(Integer tripDetailId) {
-        if (tripDetailRepository.existsById(tripDetailId)) {
-            tripDetailRepository.deleteById(tripDetailId);
-            return true;
-        }
-        return false;
+    public void deleteTripDetail(Integer tripDetailId) {
+        tripDetailRepository.findById(tripDetailId)
+                .orElseThrow(() -> new ResourceNotFoundException("Trip Details not found with id: " + tripDetailId));
+        tripDetailRepository.deleteById(tripDetailId);
     }
 }

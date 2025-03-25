@@ -1,5 +1,6 @@
 package traveltracker.entities;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
@@ -10,5 +11,6 @@ public class Interest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer interestId;
 
+    @NotBlank(message = "Interest Name is required")
     private String interestName;
 }

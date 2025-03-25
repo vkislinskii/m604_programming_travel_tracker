@@ -3,10 +3,10 @@ package traveltracker.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveltracker.ResourceNotFoundException;
 import traveltracker.entities.City;
 import traveltracker.repositories.CityRepository;
 
-import java.util.Optional;
 
 @Service
 public class CityService {
@@ -17,8 +17,9 @@ public class CityService {
         this.cityRepository = cityRepository;
     }
 
-    public Optional<City> getCityById(Integer id) {
-        return cityRepository.findById(id);
+    public City getCityById(Integer id) {
+        return cityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
     }
 
     public City addCity(City city) {
@@ -27,7 +28,7 @@ public class CityService {
 
     public City updateCity(Integer cityId, City cityDetails) {
         City existingCity = cityRepository.findById(cityId)
-                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + cityId));
+                .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + cityId));
 
         existingCity.setCityName(cityDetails.getCityName());
         existingCity.setCountry(cityDetails.getCountry());
@@ -36,11 +37,9 @@ public class CityService {
     }
 
     @Transactional
-    public boolean deleteCity(Integer cityId) {
-        if (cityRepository.existsById(cityId)) {
-            cityRepository.deleteById(cityId);
-            return true;
-        }
-        return false;
+    public void deleteCity(Integer cityId) {
+        cityRepository.findById(cityId)
+                .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + cityId));
+        cityRepository.deleteById(cityId);
     }
 }

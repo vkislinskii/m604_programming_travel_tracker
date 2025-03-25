@@ -1,5 +1,6 @@
 package traveltracker.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,18 +23,18 @@ public class TransportTypeController {
     }
 
     @GetMapping("/all")
-    public List<TransportType> getAllTransportTypes() {
-        return transportTypeService.getAllTransportTypes();
+    public ResponseEntity<List<TransportType>> getAllTransportTypes() {
+        return ResponseEntity.ok(transportTypeService.getAllTransportTypes());
     }
 
     @PostMapping("/add")
-    public TransportType addTransportType(@RequestBody TransportType transportType) {
-        return transportTypeService.addTransportType(transportType);
+    public ResponseEntity<TransportType> addTransportType(@Valid @RequestBody TransportType transportType) {
+        return ResponseEntity.ok(transportTypeService.addTransportType(transportType));
     }
 
     @DeleteMapping("/delete-{transportType}")
-    public ResponseEntity<Void> deleteTransportType(@PathVariable String transportType) {
-        boolean isDeleted = transportTypeService.deleteTransportType(transportType);
-        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<TransportType> deleteTransportType(@PathVariable String transportType) {
+        transportTypeService.deleteTransportType(transportType);
+        return ResponseEntity.noContent().build();
     }
 }

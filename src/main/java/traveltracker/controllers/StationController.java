@@ -1,5 +1,6 @@
 package traveltracker.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +9,6 @@ import traveltracker.repositories.StationRepository;
 import traveltracker.services.StationService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/stations")
@@ -23,27 +23,27 @@ public class StationController {
     }
 
     @GetMapping("/all")
-    public List<Station> getAllStations() {
-        return stationService.getAllStations();
+    public ResponseEntity<List<Station>> getAllStations() {
+        return ResponseEntity.ok(stationService.getAllStations());
     }
 
     @PostMapping("/add")
-    public Station addStation(@RequestBody Station station) {
-        return stationService.addStation(station);
+    public ResponseEntity<Station> addStation(@Valid @RequestBody Station station) {
+        return ResponseEntity.ok(stationService.addStation(station));
     }
 
     @PutMapping("/update-{stationName}")
     public ResponseEntity<Station> updateStation(
             @PathVariable String stationName,
-            @RequestBody Station stationDetails) {
+            @Valid @RequestBody Station stationDetails) {
 
         Station updatedEntity = stationService.updateStation(stationName, stationDetails);
         return ResponseEntity.ok(updatedEntity);
     }
 
     @DeleteMapping("/delete-{stationName}")
-    public ResponseEntity<Void> deleteStation(@PathVariable String stationName) {
-        boolean isDeleted = stationService.deleteStation(stationName);
-        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<Station> deleteStation(@PathVariable String stationName) {
+        stationService.deleteStation(stationName);
+        return ResponseEntity.noContent().build();
     }
 }

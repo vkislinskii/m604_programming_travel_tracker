@@ -1,5 +1,6 @@
 package traveltracker.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +8,6 @@ import traveltracker.entities.Emission;
 import traveltracker.repositories.EmissionRepository;
 import traveltracker.services.EmissionService;
 
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/emissions")
@@ -22,27 +22,27 @@ public class EmissionController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Emission> getEmissionById(@PathVariable Integer id) {
-        return emissionService.getEmissionById(id);
+    public ResponseEntity<Emission> getEmissionById(@PathVariable Integer id) {
+        return ResponseEntity.ok(emissionService.getEmissionById(id));
     }
 
     @PostMapping("/add")
-    public Emission addEmission(@RequestBody Emission emission) {
-        return emissionService.addEmission(emission);
+    public ResponseEntity<Emission> addEmission(@Valid @RequestBody Emission emission) {
+        return ResponseEntity.ok(emissionService.addEmission(emission));
     }
 
     @PutMapping("/update-{emissionId}")
     public ResponseEntity<Emission> updateEmission(
             @PathVariable Integer emissionId,
-            @RequestBody Emission emissionDetails) {
+            @Valid @RequestBody Emission emissionDetails) {
 
         Emission updatedEntity = emissionService.updateEmission(emissionId, emissionDetails);
         return ResponseEntity.ok(updatedEntity);
     }
 
     @DeleteMapping("/delete-{emissionId}")
-    public ResponseEntity<Void> deleteEmission(@PathVariable Integer emissionId) {
-        boolean isDeleted = emissionService.deleteEmission(emissionId);
-        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<Emission> deleteEmission(@PathVariable Integer emissionId) {
+        emissionService.deleteEmission(emissionId);
+        return ResponseEntity.noContent().build();
     }
 }

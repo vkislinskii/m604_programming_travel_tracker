@@ -3,10 +3,10 @@ package traveltracker.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveltracker.ResourceNotFoundException;
 import traveltracker.entities.Emission;
 import traveltracker.repositories.EmissionRepository;
 
-import java.util.Optional;
 
 @Service
 public class EmissionService {
@@ -17,8 +17,9 @@ public class EmissionService {
         this.emissionRepository = emissionRepository;
     }
 
-    public Optional<Emission> getEmissionById(Integer id) {
-        return emissionRepository.findById(id);
+    public Emission getEmissionById(Integer id) {
+        return emissionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Emission not found with id: " + id));
     }
 
     public Emission addEmission(Emission emission) {
@@ -27,7 +28,7 @@ public class EmissionService {
 
     public Emission updateEmission(Integer emissionId, Emission emissionDetails) {
         Emission existingEmission = emissionRepository.findById(emissionId)
-                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + emissionId));
+                .orElseThrow(() -> new ResourceNotFoundException("Emission not found with id: " + emissionId));
 
         existingEmission.setTransportType(emissionDetails.getTransportType());
         existingEmission.setMinDistance(emissionDetails.getMinDistance());
@@ -38,11 +39,9 @@ public class EmissionService {
     }
 
     @Transactional
-    public boolean deleteEmission(Integer emissionId) {
-        if (emissionRepository.existsById(emissionId)) {
-            emissionRepository.deleteById(emissionId);
-            return true;
-        }
-        return false;
+    public void deleteEmission(Integer emissionId) {
+        emissionRepository.findById(emissionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Emission not found with id: " + emissionId));
+        emissionRepository.deleteById(emissionId);
     }
 }

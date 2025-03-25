@@ -3,11 +3,11 @@ package traveltracker.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveltracker.ResourceNotFoundException;
 import traveltracker.entities.Station;
 import traveltracker.repositories.StationRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StationService {
@@ -18,11 +18,12 @@ public class StationService {
         this.stationRepository = stationRepository;
     }
 
-    /*public Optional<Station> getStationsByCityId(Integer cityId) {
-        return stationRepository.findByCity(cityId);        //.findBy(); //.findByCity(cityId); //City(cityId);
-    }*/
     public List<Station> getAllStations() {
-        return stationRepository.findAll();
+        List<Station> stations = stationRepository.findAll();
+        if (stations.isEmpty()) {
+            throw new ResourceNotFoundException("No stations were found");
+        }
+        return stations;
     }
 
     public Station addStation(Station station) {
@@ -31,7 +32,7 @@ public class StationService {
 
     public Station updateStation(String stationName, Station stationDetails) {
         Station existingStation = stationRepository.findById(stationName)
-                .orElseThrow(() -> new RuntimeException("Entity not found with id: " + stationName));
+                .orElseThrow(() -> new ResourceNotFoundException("Station not found with name: " + stationName));
 
         existingStation.setCity(stationDetails.getCity());
 
@@ -39,11 +40,9 @@ public class StationService {
     }
 
     @Transactional
-    public boolean deleteStation(String stationName) {
-        if (stationRepository.existsById(stationName)) {
-            stationRepository.deleteById(stationName);
-            return true;
-        }
-        return false;
+    public void deleteStation(String stationName) {
+        stationRepository.findById(stationName)
+                .orElseThrow(() -> new ResourceNotFoundException("Station not found with name: " + stationName));
+        stationRepository.deleteById(stationName);
     }
 }

@@ -3,11 +3,11 @@ package traveltracker.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveltracker.ResourceNotFoundException;
 import traveltracker.entities.TransportType;
 import traveltracker.repositories.TransportTypeRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TransportTypeService {
@@ -19,7 +19,11 @@ public class TransportTypeService {
     }
 
     public List<TransportType> getAllTransportTypes() {
-        return transportTypeRepository.findAll();
+        List<TransportType> transportTypes = transportTypeRepository.findAll();
+        if (transportTypes.isEmpty()) {
+            throw new ResourceNotFoundException("No transport types were found");
+        }
+        return transportTypes;
     }
 
     public TransportType addTransportType(TransportType transportType) {
@@ -27,11 +31,9 @@ public class TransportTypeService {
     }
 
     @Transactional
-    public boolean deleteTransportType(String transportType) {
-        if (transportTypeRepository.existsById(transportType)) {
-            transportTypeRepository.deleteById(transportType);
-            return true;
-        }
-        return false;
+    public void deleteTransportType(String transportType) {
+        transportTypeRepository.findById(transportType)
+                .orElseThrow(() -> new ResourceNotFoundException("Transport Type not found with name: " + transportType));
+        transportTypeRepository.deleteById(transportType);
     }
 }
