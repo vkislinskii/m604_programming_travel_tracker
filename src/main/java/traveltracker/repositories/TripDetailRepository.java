@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface TripDetailRepository extends JpaRepository<TripDetail, Integer>{
 
     Optional<TripDetail> findByTripDetailId(Integer tripDetailId);
+
+    List<TripDetail> findByTripId_TripId(Integer tripId);
 }

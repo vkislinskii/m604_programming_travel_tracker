@@ -63,4 +63,23 @@ public class TripService {
         return false;
     }
 
+    static double calculateTripEmissions(int tripId, TripDetailRepository tripDetailRepository, EmissionRepository emissionRepository) {
+        List<TripDetail> tripDetails = tripDetailRepository.findByTripId_TripId(tripId);
+        int totalDistance = 0;
+        double totalEmissions = 0;
+        for (TripDetail tripDetail : tripDetails) {
+            Route routeId = tripDetail.getRouteId();
+            int distance = routeId.getDistance();
+            totalDistance += distance;
+        }
+        Emission emission = emissionRepository.findByTransportType_TransportType("Electric train");
+        totalEmissions += totalDistance * emission.getCo2Coef();
+        return totalEmissions;
+    }
+
+    public String sendTripEmissions(Integer tripId) {
+        double totalEmissions = calculateTripEmissions(tripId, tripDetailRepository, emissionRepository);
+        return "For trip#" + tripId + " carbon emissions were " + totalEmissions + " kg CO2";
+    }
+
 }

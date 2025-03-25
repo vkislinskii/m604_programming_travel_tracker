@@ -45,4 +45,9 @@ public class UserController {
         boolean isDeleted = userService.deleteUser(userId);
         return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/emissions/{userId}")
+    public String calculateUserLastTripEmission(@PathVariable Integer userId) {
+        return userService.calculateUserLastTripEmission(userId);
+    }
 }

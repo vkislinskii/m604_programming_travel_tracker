@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TripRepository extends JpaRepository<Trip, Integer>{
 
+    List<Trip> findByUserId_UserId(Integer userId);
 }

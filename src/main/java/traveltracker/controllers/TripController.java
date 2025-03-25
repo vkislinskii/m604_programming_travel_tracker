@@ -52,6 +52,11 @@ public class TripController {
         return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/emissions/{tripId}")
+    public String calculateTripEmissions(@PathVariable Integer tripId) {
+        return tripService.sendTripEmissions(tripId);
+    }
+
     /*@GetMapping("/{tripId}/emissions")
     public ResponseEntity<Double> getTripEmissions(@PathVariable int tripId) {
         double emissions = tripService.calculateTripEmissions(tripId);
