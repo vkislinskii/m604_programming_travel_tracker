@@ -5,25 +5,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.User;
-import traveltracker.repositories.UserRepository;
 import traveltracker.services.UserService;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserService userService, UserRepository userRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userRepository = userRepository;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable Integer userId) {
+        return ResponseEntity.ok(userService.getUserById(userId));
     }
 
     @PostMapping("/add")
@@ -31,7 +28,7 @@ public class UserController {
         return ResponseEntity.ok(userService.addUser(user));
     }
 
-    @PutMapping("/update-{userId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<User> updateUser(
             @PathVariable Integer userId,
             @Valid @RequestBody User userDetails) {
@@ -40,7 +37,7 @@ public class UserController {
         return ResponseEntity.ok(updatedEntity);
     }
 
-    @DeleteMapping("/delete-{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<User> deleteUser(@PathVariable Integer userId) {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();

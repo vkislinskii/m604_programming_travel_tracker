@@ -20,12 +20,12 @@ public class Route {
 
     @ManyToOne
     @JoinColumn(name = "station1_name")
-    @NotBlank(message = "Station1 Name is required")
+    @NotNull(message = "Station1 Name is required")
     private Station station1Name;
 
     @ManyToOne
     @JoinColumn(name = "station2_name")
-    @NotBlank(message = "Station2 Name is required")
+    @NotNull(message = "Station2 Name is required")
     private Station station2Name;
 
     @NotNull(message = "Distance is required")

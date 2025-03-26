@@ -5,25 +5,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.RouteCode;
-import traveltracker.repositories.RouteCodeRepository;
 import traveltracker.services.RouteCodeService;
 
 
 @RestController
-@RequestMapping("/route-codes")
+@RequestMapping("/api/route-codes")
 public class RouteCodeController {
     private final RouteCodeService routeCodeService;
-    private final RouteCodeRepository routeCodeRepository;
 
     @Autowired
-    public RouteCodeController(RouteCodeService routeCodeService, RouteCodeRepository routeCodeRepository) {
+    public RouteCodeController(RouteCodeService routeCodeService) {
         this.routeCodeService = routeCodeService;
-        this.routeCodeRepository = routeCodeRepository;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RouteCode> getRouteCodeById(@PathVariable Integer id) {
-        return ResponseEntity.ok(routeCodeService.getRouteCodeById(id));
+    @GetMapping("/{routeCodeId}")
+    public ResponseEntity<RouteCode> getRouteCodeById(@PathVariable Integer routeCodeId) {
+        return ResponseEntity.ok(routeCodeService.getRouteCodeById(routeCodeId));
     }
 
     @PostMapping("/add")
@@ -31,7 +28,7 @@ public class RouteCodeController {
         return ResponseEntity.ok(routeCodeService.addRouteCode(routeCode));
     }
 
-    @PutMapping("/update-{routeCodeId}")
+    @PutMapping("/{routeCodeId}")
     public ResponseEntity<RouteCode> updateRouteCode(
             @PathVariable String routeCodeId,
             @Valid @RequestBody RouteCode routeCodeDetails) {
@@ -40,7 +37,7 @@ public class RouteCodeController {
         return ResponseEntity.ok(updatedEntity);
     }
 
-    @DeleteMapping("/delete-{routeCodeId}")
+    @DeleteMapping("/{routeCodeId}")
     public ResponseEntity<RouteCode> deleteRouteCode(@PathVariable String routeCodeId) {
         routeCodeService.deleteRouteCode(routeCodeId);
         return ResponseEntity.noContent().build();

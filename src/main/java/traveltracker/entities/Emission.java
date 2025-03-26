@@ -15,7 +15,7 @@ public class Emission {
 
     @ManyToOne
     @JoinColumn(name = "transport_type")
-    @NotBlank(message = "Transport Type is required")
+    @NotNull(message = "Transport Type is required")
     private TransportType transportType;
 
     private Integer minDistance;

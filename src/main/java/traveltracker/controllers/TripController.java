@@ -5,21 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.Trip;
-import traveltracker.repositories.TripRepository;
 import traveltracker.services.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/trips")
+@RequestMapping("/api/trips")
 public class TripController {
     private final TripService tripService;
-    private final TripRepository tripRepository;
 
     @Autowired
-    public TripController(TripService tripService, TripRepository tripRepository) {
+    public TripController(TripService tripService) {
         this.tripService = tripService;
-        this.tripRepository = tripRepository;
     }
 
     @GetMapping ("/all-trips")
@@ -27,9 +24,9 @@ public class TripController {
         return tripService.getAllTrips();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Trip> getTripById(@PathVariable Integer id) {
-        return ResponseEntity.ok(tripService.getTripById(id));
+    @GetMapping("/{tripId}")
+    public ResponseEntity<Trip> getTripById(@PathVariable Integer tripId) {
+        return ResponseEntity.ok(tripService.getTripById(tripId));
     }
 
     @PostMapping("/add")
@@ -37,7 +34,7 @@ public class TripController {
         return ResponseEntity.ok(tripService.addTrip(trip));
     }
 
-    @PutMapping("/update-{tripId}")
+    @PutMapping("/{tripId}")
     public ResponseEntity<Trip> updateTrip(
             @PathVariable Integer tripId,
             @Valid @RequestBody Trip tripDetails) {
@@ -46,7 +43,7 @@ public class TripController {
         return ResponseEntity.ok(updatedEntity);
     }
 
-    @DeleteMapping("/delete-{tripId}")
+    @DeleteMapping("/{tripId}")
     public ResponseEntity<Trip> deleteTrip(@PathVariable Integer tripId) {
         tripService.deleteTrip(tripId);
         return ResponseEntity.noContent().build();

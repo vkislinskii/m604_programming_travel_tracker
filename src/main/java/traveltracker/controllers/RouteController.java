@@ -5,25 +5,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.Route;
-import traveltracker.repositories.RouteRepository;
 import traveltracker.services.RouteService;
 
 
 @RestController
-@RequestMapping("/routes")
+@RequestMapping("/api/routes")
 public class RouteController {
     private final RouteService routeService;
-    private final RouteRepository routeRepository;
 
     @Autowired
-    public RouteController(RouteService routeService, RouteRepository routeRepository) {
+    public RouteController(RouteService routeService) {
         this.routeService = routeService;
-        this.routeRepository = routeRepository;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Route> getRouteById(@PathVariable Integer id) {
-        return ResponseEntity.ok(routeService.getRouteById(id));
+    @GetMapping("/{routeId}")
+    public ResponseEntity<Route> getRouteById(@PathVariable Integer routeId) {
+        return ResponseEntity.ok(routeService.getRouteById(routeId));
     }
 
     @PostMapping("/add")
@@ -31,7 +28,7 @@ public class RouteController {
         return ResponseEntity.ok(routeService.addRoute(route));
     }
 
-    @PutMapping("/update-{routeId}")
+    @PutMapping("/{routeId}")
     public ResponseEntity<Route> updateRoute(
             @PathVariable Integer routeId,
             @Valid @RequestBody Route routeDetails) {
@@ -40,7 +37,7 @@ public class RouteController {
         return ResponseEntity.ok(updatedEntity);
     }
 
-    @DeleteMapping("/delete-{routeId}")
+    @DeleteMapping("/{routeId}")
     public ResponseEntity<Route> deleteRoute(@PathVariable Integer routeId) {
         routeService.deleteRoute(routeId);
         return ResponseEntity.noContent().build();

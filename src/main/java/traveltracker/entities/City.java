@@ -12,7 +12,9 @@ public class City {
     private Integer cityId;
 
     @NotBlank(message = "City name is required")
+    @Column(length = 50)
     private String cityName;
     @NotBlank(message = "Country is required")
+    @Column(length = 50)
     private String country;
 }

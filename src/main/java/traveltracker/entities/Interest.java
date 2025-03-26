@@ -12,5 +12,6 @@ public class Interest {
     private Integer interestId;
 
     @NotBlank(message = "Interest Name is required")
+    @Column(length = 50)
     private String interestName;
 }

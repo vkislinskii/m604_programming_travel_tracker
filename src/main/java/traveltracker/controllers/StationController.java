@@ -5,21 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.Station;
-import traveltracker.repositories.StationRepository;
 import traveltracker.services.StationService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/stations")
+@RequestMapping("/api/stations")
 public class StationController {
     private final StationService stationService;
-    private final StationRepository stationRepository;
 
     @Autowired
-    public StationController(StationService stationService, StationRepository stationRepository) {
+    public StationController(StationService stationService) {
         this.stationService = stationService;
-        this.stationRepository = stationRepository;
     }
 
     @GetMapping("/all")
@@ -32,7 +29,7 @@ public class StationController {
         return ResponseEntity.ok(stationService.addStation(station));
     }
 
-    @PutMapping("/update-{stationName}")
+    @PutMapping("/{stationName}")
     public ResponseEntity<Station> updateStation(
             @PathVariable String stationName,
             @Valid @RequestBody Station stationDetails) {
@@ -41,7 +38,7 @@ public class StationController {
         return ResponseEntity.ok(updatedEntity);
     }
 
-    @DeleteMapping("/delete-{stationName}")
+    @DeleteMapping("/{stationName}")
     public ResponseEntity<Station> deleteStation(@PathVariable String stationName) {
         stationService.deleteStation(stationName);
         return ResponseEntity.noContent().build();

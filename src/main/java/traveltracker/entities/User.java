@@ -14,8 +14,10 @@ public class User {
     private Integer userId;
 
     @NotBlank(message = "First Name is required")
+    @Column(length = 50)
     private String firstName;
     @NotBlank(message = "Last Name is required")
+    @Column(length = 50)
     private String lastName;
 
     @ManyToOne

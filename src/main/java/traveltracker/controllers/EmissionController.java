@@ -10,20 +10,18 @@ import traveltracker.services.EmissionService;
 
 
 @RestController
-@RequestMapping("/emissions")
+@RequestMapping("/api/emissions")
 public class EmissionController {
     private final EmissionService emissionService;
-    private final EmissionRepository emissionRepository;
 
     @Autowired
-    public EmissionController(EmissionService emissionService, EmissionRepository emissionRepository) {
+    public EmissionController(EmissionService emissionService) {
         this.emissionService = emissionService;
-        this.emissionRepository = emissionRepository;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Emission> getEmissionById(@PathVariable Integer id) {
-        return ResponseEntity.ok(emissionService.getEmissionById(id));
+    @GetMapping("/{emissionId}")
+    public ResponseEntity<Emission> getEmissionById(@PathVariable Integer emissionId) {
+        return ResponseEntity.ok(emissionService.getEmissionById(emissionId));
     }
 
     @PostMapping("/add")
@@ -31,7 +29,7 @@ public class EmissionController {
         return ResponseEntity.ok(emissionService.addEmission(emission));
     }
 
-    @PutMapping("/update-{emissionId}")
+    @PutMapping("/{emissionId}")
     public ResponseEntity<Emission> updateEmission(
             @PathVariable Integer emissionId,
             @Valid @RequestBody Emission emissionDetails) {
@@ -40,7 +38,7 @@ public class EmissionController {
         return ResponseEntity.ok(updatedEntity);
     }
 
-    @DeleteMapping("/delete-{emissionId}")
+    @DeleteMapping("/{emissionId}")
     public ResponseEntity<Emission> deleteEmission(@PathVariable Integer emissionId) {
         emissionService.deleteEmission(emissionId);
         return ResponseEntity.noContent().build();

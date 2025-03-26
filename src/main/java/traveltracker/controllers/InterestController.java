@@ -5,22 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import traveltracker.entities.Interest;
-import traveltracker.repositories.InterestRepository;
 import traveltracker.services.InterestService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/interests")
+@RequestMapping("/api/interests")
 public class InterestController {
     private final InterestService interestService;
-    private final InterestRepository interestRepository;
 
     @Autowired
-    public InterestController(InterestService interestService, InterestRepository interestRepository) {
+    public InterestController(InterestService interestService) {
 
         this.interestService = interestService;
-        this.interestRepository = interestRepository;
     }
 
     @GetMapping("/all")
@@ -33,7 +30,7 @@ public class InterestController {
         return ResponseEntity.ok(interestService.addInterest(interest));
     }
 
-    @PutMapping("/update-{interestId}")
+    @PutMapping("/{interestId}")
     public ResponseEntity<Interest> updateInterest(
             @PathVariable Integer interestId,
             @Valid @RequestBody Interest interestDetails) {
@@ -42,7 +39,7 @@ public class InterestController {
         return ResponseEntity.ok(updatedEntity);
     }
 
-    @DeleteMapping("/delete-{interestId}")
+    @DeleteMapping("/{interestId}")
     public ResponseEntity<Interest> deleteInterest(@PathVariable Integer interestId) {
         interestService.deleteInterest(interestId);
         return ResponseEntity.noContent().build();

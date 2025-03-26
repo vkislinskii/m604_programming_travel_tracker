@@ -11,7 +11,9 @@ public class RouteCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer routeCodeId;
 
+    @Column(length = 50)
     private String routeName;
 
+    @Column(length = 50)
     private String operator;
 }
