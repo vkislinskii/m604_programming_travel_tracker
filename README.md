@@ -5,5 +5,5 @@ This project is part of a Advanced Programming course in Java at the Gisma Unive
 
 #### Features
    * MySQL Database ([ERD](https://github.com/vkislinskii/m604_programming_travel_tracker/blob/main/mysql_erd.JPG)): Relational database implementation.
-   * Spring Boot Application: Database tables representation and RESTful APIs creation.
-   * Error Handling: Exception handling and error messages in HTTP responses.   
+   * Spring Boot Application: Backend development and RESTful APIs creation.
+   * Error Handling: Exception handling and sending error messages in HTTP responses.   
