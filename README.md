@@ -1,7 +1,7 @@
 ## Travel Tracker Project (Java & Spring Boot)
 
 #### Overview
-This project is part of a Advanced Programming course in Java at the Gisma University of Applied Sciences. The goal was to create a functional system that integrates database interaction and backend logic.
+This project is part of an Advanced Programming course in Java at the Gisma University of Applied Sciences. The goal was to create a functional system that integrates database interaction and backend logic.
 
 #### Features
    * MySQL Database ([ERD](https://github.com/vkislinskii/m604_programming_travel_tracker/blob/main/mysql_erd.JPG)): Relational database implementation.
